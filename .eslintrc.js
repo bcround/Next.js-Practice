@@ -14,10 +14,10 @@ module.exports = {
   plugins: ["react"],
   rules: {
     quotes: ["error", "double"],
-    "@typescript-eslint/quotes": ["error", "double"],
+    // "@typescript-eslint/quotes": ["error", "double"],
     "no-unused-vars": "off",
     "spaced-comment": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
+    // "@typescript-eslint/no-unused-vars": "warn",
     "jsx-a11y/control-has-associated-label": "off",
     "react/no-array-index-key": "off",
     "comma-dangle": "off",
