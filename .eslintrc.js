@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
+    "max-len": "off",
     quotes: ["error", "double"],
     // "@typescript-eslint/quotes": ["error", "double"],
     "no-unused-vars": "off",
