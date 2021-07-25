@@ -1,9 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/dist/client/router";
+import { useDispatch } from "react-redux";
+import { useSelector } from "../store";
+import { todoActions } from "../store/todo";
 import palette from "../styles/palette";
 import { TodoType } from "../types/todo";
 import TrashCanIcon from "../public/statics/svg/trash_can.svg";
 import CheckMarkIcon from "../public/statics/svg/check_mark.svg";
+import { checkTodoAPI, deleteTodoAPI } from "../lib/api/todo";
 
 const Container = styled.div`
   width: 100%;
@@ -118,15 +123,15 @@ const Container = styled.div`
   }
 `;
 
-interface IProps {
-  todos: TodoType[];
-}
-
 type ObjectIndexType = {
   [key: string]: number | undefined;
 };
 
-const TodoList: React.FC<IProps> = ({ todos }) => {
+const TodoList: React.FC = () => {
+  const todos = useSelector((state) => state.todo.todos);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const todoColorNums = useMemo(() => {
     const colors: ObjectIndexType = {};
 
@@ -142,6 +147,41 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
 
     return colors;
   }, [todos]);
+
+  const checkTodo = async (id: number) => {
+    try {
+      await checkTodoAPI(id);
+      console.log("체크하였습니다.");
+      // 체크를 적용하는 방법 1(데이터 다시 받기), 새로고침 사용
+      // router.reload();
+
+      // 체크를 적용하는 방법 2(데이터 다시받기), 클라이언트 측 내비게이션을 이용
+      // router.push("/");
+
+      // 체크를 적용하는 방법 3(data를 local로 저장하여 사용하기)
+      const newTodos = todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, checked: !todo.checked };
+        }
+
+        return todo;
+      });
+      dispatch(todoActions.setTodo(newTodos));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const deleteTodo = async (id: number) => {
+    try {
+      await deleteTodoAPI(id);
+      const newTodos = todos.filter((todo) => todo.id !== id);
+      dispatch(todoActions.setTodo(newTodos));
+      console.log("삭제했습니다");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Container>
@@ -174,17 +214,26 @@ const TodoList: React.FC<IProps> = ({ todos }) => {
             <div className="todo-right-side">
               {todo.checked ? (
                 <>
-                  <TrashCanIcon className="todo-trash-can" onClick={() => {}} />
+                  <TrashCanIcon
+                    className="todo-trash-can"
+                    onClick={() => {
+                      deleteTodo(todo.id);
+                    }}
+                  />
                   <CheckMarkIcon
                     className="todo-check-mark"
-                    onClick={() => {}}
+                    onClick={() => {
+                      checkTodo(todo.id);
+                    }}
                   />
                 </>
               ) : (
                 <button
                   type="button"
                   className="todo-button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    checkTodo(todo.id);
+                  }}
                 />
               )}
             </div>
