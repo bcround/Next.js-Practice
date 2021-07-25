@@ -20,16 +20,22 @@
   },
   "homepage": "https://github.com/bcround/Next.js-Practice#readme",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.1",
     "axios": "^0.21.1",
     "next": "^11.0.1",
+    "next-redux-wrapper": "^7.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
     "styled-components": "^5.3.0",
     "styled-reset": "^4.3.4"
   },
   "devDependencies": {
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.14",
+    "@types/react-redux": "^7.1.18",
     "@types/styled-components": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
